@@ -3,6 +3,8 @@ package com.test;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class HamCrestAssert58 {
     @Test
@@ -19,6 +21,7 @@ public class HamCrestAssert58 {
                 path("workspaces[0].name");
 
         System.out.println("workspace name - " +name);
+        assertThat(name,equalTo("My Workspace"));
         //System.out.println("workspace name - " +JsonPath.from(res).getString("workspaces[0].name"));
        /* System.out.println("workspace name - " +js.getString("workspaces[0].name"));
         System.out.println("response name: " +res.path("workspaces[0].name"));*/
