@@ -17,7 +17,6 @@ import static org.hamcrest.Matchers.is;
 
 
 public class ResponseSpecificationuilder {
-    ResponseSpecification responseSpecification;
     @BeforeClass
     public void beforeCLass() {
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder();
@@ -30,7 +29,7 @@ public class ResponseSpecificationuilder {
                 expectStatusCode(200).
                 expectContentType(ContentType.JSON).
                 log(LogDetail.ALL);
-        responseSpecification = responseSpecBuilder.build();
+        RestAssured.responseSpecification = responseSpecBuilder.build();
     }
 
     /*RequestSpecification requestSpecification =  with().
@@ -40,14 +39,12 @@ public class ResponseSpecificationuilder {
 
     @Test
     public void validate_status_code(){
-        get("/workspaces").
-              then().spec(responseSpecification);
+        get("/workspaces");
 
     }
     @Test
     public void validate_response_body(){
-        Response response = get("/workspaces").
-                then().spec(responseSpecification).
+        Response response = get("/workspaces").then().
                 extract().response();
         assertThat(response.path("workspaces[0].name").toString(),is(equalTo("My Workspace")));
 
