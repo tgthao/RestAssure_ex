@@ -5,6 +5,7 @@ import io.restassured.http.Headers;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
@@ -29,7 +30,7 @@ public class MultipleHeaders73 {
                         statusCode(200);
     }
 
-    @Test
+
     void assert_response_headers(){
     HashMap<String,String> headers = new HashMap<String,String>();
     headers.put("header","value2");
@@ -48,7 +49,7 @@ public class MultipleHeaders73 {
                         header("responseHeader","resValue2").
                         header("X-RateLimit-Limit","120")
                         ;
-    }@Test
+    }
     void extract_response_headers_75(){
     HashMap<String,String> headers = new HashMap<String,String>();
     headers.put("header","value2");
@@ -72,6 +73,28 @@ public class MultipleHeaders73 {
      /*   System.out.println("header name = "+extractedHeaders.get("responseHeader").getName());
         System.out.println("header value = "+extractedHeaders.get("responseHeader").getValue());
         System.out.println("header value = "+extractedHeaders.getValue("responseHeader"));*/
+    }
+    @Test
+    void extract_multil_headers_76(){
+    HashMap<String,String> headers = new HashMap<String,String>();
+    headers.put("header","value2");
+    headers.put("x-mock-match-request-headers","header");
+
+        Headers extractedHeaders =           given().
+                            baseUri("https://8f6d7436-aba9-4c1f-bc81-fdc881a11fb1.mock.pstmn.io").
+                            headers(headers).
+                when().
+                        get("/get").
+                then().
+                        assertThat().
+                        statusCode(200).
+                        extract().
+                        headers()
+                        ;
+       List<String> values = extractedHeaders.getValues("multiValueHeader");
+       for(String value : values){
+           System.out.println();
+       }
     }
 
 
