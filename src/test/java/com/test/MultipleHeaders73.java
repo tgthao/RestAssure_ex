@@ -1,5 +1,6 @@
 package com.test;
 
+import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import org.testng.annotations.Test;
 
@@ -64,9 +65,13 @@ public class MultipleHeaders73 {
                         extract().
                         headers()
                         ;
-        System.out.println("header name = "+extractedHeaders.get("responseHeader").getName());
+        for(Header header:extractedHeaders){
+            System.out.println("header name = "+header.getName() +", ");
+            System.out.println("header value = "+header.getValue());
+        }
+     /*   System.out.println("header name = "+extractedHeaders.get("responseHeader").getName());
         System.out.println("header value = "+extractedHeaders.get("responseHeader").getValue());
-        System.out.println("header value = "+extractedHeaders.getValue("responseHeader"));
+        System.out.println("header value = "+extractedHeaders.getValue("responseHeader"));*/
     }
 
 
