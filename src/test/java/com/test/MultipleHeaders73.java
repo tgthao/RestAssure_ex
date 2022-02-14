@@ -52,13 +52,13 @@ public class MultipleHeaders73 {
     }
     void extract_response_headers_75(){
     HashMap<String,String> headers = new HashMap<String,String>();
-    headers.put("header","value2");
+    headers.put("header","value1");
     headers.put("x-mock-match-request-headers","header");
 
     Headers extractedHeaders =           given().
                         baseUri("https://8f6d7436-aba9-4c1f-bc81-fdc881a11fb1.mock.pstmn.io").
-                        header("multiValueHeader","value1","value2").
-                when().
+                        headers(headers).
+            when().
                         get("/get").
                 then().
                         assertThat().
@@ -77,12 +77,12 @@ public class MultipleHeaders73 {
     @Test
     void extract_multil_headers_76(){
     HashMap<String,String> headers = new HashMap<String,String>();
-    headers.put("header","value2");
+    headers.put("header","value1");
     headers.put("x-mock-match-request-headers","header");
 
         Headers extractedHeaders =           given().
                             baseUri("https://8f6d7436-aba9-4c1f-bc81-fdc881a11fb1.mock.pstmn.io").
-                            headers(headers).
+                headers(headers).
                 when().
                         get("/get").
                 then().
@@ -93,7 +93,7 @@ public class MultipleHeaders73 {
                         ;
        List<String> values = extractedHeaders.getValues("multiValueHeader");
        for(String value : values){
-           System.out.println();
+           System.out.println(value);
        }
     }
 
