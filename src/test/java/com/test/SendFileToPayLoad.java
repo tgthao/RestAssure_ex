@@ -10,6 +10,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.File;
+import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.with;
@@ -33,12 +34,29 @@ public class SendFileToPayLoad {
                 expectContentType(ContentType.JSON).log(LogDetail.ALL);
         RestAssured.responseSpecification = responseSpecBuilder.build();
     }
-    @Test
+
     public void validate_post_request_bdd_styple(){
         File file = new File("src/main/resources/CreateWorkspacePayload.json");
 
                 given().
                         body(file).
+                when().
+                    post("/workspaces").
+                then().
+                        log().all().
+                        assertThat().body("workspace.name",equalTo("My change WorkSpaces Using Post Rest Assured"),
+                                "workspace.id",matchesPattern("^[a-z0-9-]{36}$"));
+    }
+    @Test
+    public void validate_post_request_payload_as_map(){
+        HashMap<String,Object> mainObject = new HashMap<String,Object>();
+        HashMap<String,String> nestedObjects = new HashMap<String,String>();
+        nestedObjects.put("name","My Name API UAT");
+        nestedObjects.put("type","personal");
+        nestedObjects.put("description","My Name API UAT created by GT");
+        mainObject.put("workspace",nestedObjects);
+                given().
+                        body(mainObject).
                 when().
                     post("/workspaces").
                 then().
