@@ -5,10 +5,13 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.with;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.matchesPattern;
 
@@ -39,11 +42,38 @@ public class BDDclass {
                 "        \"description\":\"Rest Assured created this\"\n" +
                 "    }\n" +
                 "}";
-                given().
+        Response response = with().
+                body(payload).
+                post("/workspaces");
+        assertThat(response.<String>path("workspace.name"), equalTo("testingWorkspace"));
+               /* given().
                         body(payload).
                 when().
                     post("/workspaces").
                 then().assertThat().body("workspace.name",equalTo("testingWorkspace"),
-                                "workspace.id",matchesPattern("473228e8-6608-4ad3-b51f-42d830fae7fc"));
+                                "workspace.id",matchesPattern("473228e8-6608-4ad3-b51f-42d830fae7fc"));*/
+    }
+
+@Test
+    public void validate_post_request_non_bdd_styple(){
+        String payload = "{\n" +
+                "    \"workspace\":{\n" +
+                "        \"name\":\"testingWorkspace\",\n" +
+                "        \"type\":\"personal\",\n" +
+
+
+                "        \"description\":\"Rest Assured created this\"\n" +
+                "    }\n" +
+                "}";
+        Response response = with().
+                body(payload).
+                post("/workspaces");
+        assertThat(response.<String>path("workspace.name"), equalTo("testingWorkspace"));
+               /* given().
+                        body(payload).
+                when().
+                    post("/workspaces").
+                then().assertThat().body("workspace.name",equalTo("testingWorkspace"),
+                                "workspace.id",matchesPattern("473228e8-6608-4ad3-b51f-42d830fae7fc"));*/
     }
 }
