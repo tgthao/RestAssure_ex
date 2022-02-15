@@ -39,7 +39,7 @@ public class ResponseSpecificationuilder {
 
     @Test
     public void validate_status_code(){
-        get("/workspaces");
+        get("/workspaces").then().log().all();
 
     }
     @Test
