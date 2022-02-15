@@ -28,8 +28,7 @@ public class AutomatePut88 {
                 expectContentType(ContentType.JSON).log(LogDetail.ALL);
         RestAssured.responseSpecification = responseSpecBuilder.build();
     }
-    @Test
-    public void validate_put_request_bdd_styple(){
+    public void validate_put_request_bdd_style(){
         String workspaceId = "f58cf130-0050-4698-87b4-e49e2d9922e0";
         String payload = "{\n" +
                 "    \"workspace\": {\n" +
@@ -49,6 +48,19 @@ public class AutomatePut88 {
                 assertThat().
                 body("workspace.name",equalTo("UAT API TestFlir WorkSpaces"),
                         "workspace.id",matchesPattern("^[a-z0-9-]{36}$"),
+                        "workspace.id",equalTo(workspaceId));
+    }
+    @Test
+    public void validate_delete_request_bdd_style(){
+        String workspaceId = "473228e8-6608-4ad3-b51f-42d830fae7fc";
+        given().
+                pathParam("workspaceId",workspaceId).
+        when().
+                delete("/workspaces/{workspaceId}").
+        then().
+                log().all().
+                assertThat().
+                body("workspace.id",matchesPattern("^[a-z0-9-]{36}$"),
                         "workspace.id",equalTo(workspaceId));
     }
 }
