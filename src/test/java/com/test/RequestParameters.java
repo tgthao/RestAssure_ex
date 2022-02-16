@@ -2,10 +2,11 @@ package com.test;
 
 import org.testng.annotations.Test;
 
+import java.util.HashMap;
+
 import static io.restassured.RestAssured.given;
 
 public class RequestParameters {
-    @Test
             public void single_query_parameters(){
         given().
                 baseUri("https://postman-echo.com")
@@ -13,6 +14,27 @@ public class RequestParameters {
                 /*Query param metter*/
                 .queryParam("foo1","bar1")
                // .log().all()
+        .when().
+                get("/get").
+        then().
+                log().all().
+                assertThat().
+                statusCode(200);
+
+    }
+    @Test
+            public void multiple_query_parameters(){
+        HashMap<String,String> queryHashMap = new HashMap<>();
+        queryHashMap.put("foo1","bar1");
+        queryHashMap.put("foo2","bar2");
+        given().
+                baseUri("https://postman-echo.com")
+                //.param("foo1","bar1")
+                /*Query param metter*/
+               /* .queryParam("foo1","bar1")
+                .queryParam("foo2","bar2")*/
+                .queryParams(queryHashMap)
+                .log().all()
         .when().
                 get("/get").
         then().
