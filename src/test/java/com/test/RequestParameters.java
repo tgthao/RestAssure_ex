@@ -29,11 +29,12 @@ public class RequestParameters {
         queryHashMap.put("foo2","bar2");
         given().
                 baseUri("https://postman-echo.com")
-                //.param("foo1","bar1")
+                .param("foo1","bar1","bar2")
+                .param("foo2","bar1;bar2")
                 /*Query param metter*/
                /* .queryParam("foo1","bar1")
                 .queryParam("foo2","bar2")*/
-                .queryParams(queryHashMap)
+                //.queryParams(queryHashMap)
                 .log().all()
         .when().
                 get("/get").
