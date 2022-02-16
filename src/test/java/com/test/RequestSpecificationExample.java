@@ -18,7 +18,12 @@ public class RequestSpecificationExample {
 
     @Test
     public void validate_status_code(){
-        Response response = requestSpecification.get("/workspaces").then().log().all().extract().response();
+        Response response = requestSpecification.
+                get("/workspaces").
+                then().
+                    log().all().
+                    extract().
+                    response();
         assertThat(response.statusCode(),is(equalTo(200)));
 
     }

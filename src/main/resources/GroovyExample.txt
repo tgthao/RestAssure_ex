@@ -1,0 +1,35 @@
+import groovy.json.JsonSlurper
+def object = new JsonSlurper().parseText(
+'''
+{    "workspaces": [
+        {
+            "id": "3e884fbb-d19a-4a62-80c9-9d6886f91f62",
+            "name": "My Workspace",
+            "type": "personal"
+        },
+        {
+            "id": "e0b1d1f7-e8c9-4e02-ab13-1ea5fa2f23b9",
+            "name": "NexleSoft",
+            "type": "personal"
+        },
+        {
+            "id": "7b8a5140-7233-41f9-a6dc-e114e72295b5",
+            "name": "Test Flir",
+            "type": "personal"
+        },
+        {
+            "id": "fb1e033d-4a61-4235-b844-4d246877569b",
+            "name": "Rest Assure",
+            "type": "team"
+        },
+        {
+            "id": "ac9fd6c0-4132-4479-8b9a-7fc03c40d9d1",
+            "name": "Team Workspace",
+            "type": "team"
+        }
+    ]
+}
+'''
+)
+def query = object.workspaces.name
+https://groovyconsole.appspot.com/

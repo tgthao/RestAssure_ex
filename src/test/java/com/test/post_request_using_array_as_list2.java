@@ -10,7 +10,6 @@ import io.restassured.specification.ResponseSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,28 +18,24 @@ import java.util.Map;
 import static io.restassured.RestAssured.config;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.matchesPattern;
 
 
-public class post_request_using_array_as_list {
-    ResponseSpecification customResponeSpecification;
+public class post_request_using_array_as_list2 {
     @BeforeClass
     public void beforeClass(){
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder()
-        .setBaseUri("https://a7654ec8-0542-4bb0-9e59-4171712ef559.mock.pstmn.io").
-                addHeader("x-mock-match-request-body","true").
-        /*setConfig(config.encoderConfig(EncoderConfig.encoderConfig().
-                appendDefaultContentCharsetToContentTypeIfUndefined(false))).*/
-                setContentType("application/json; charset=utf-8")
+                .setBaseUri("https://a7654ec8-0542-4bb0-9e59-4171712ef559.mock.pstmn.io").
+                addHeader("x-mock-match-request-body","true")
+                .setContentType(ContentType.JSON)
                 .log(LogDetail.ALL);
         RestAssured.requestSpecification = requestSpecBuilder.build();
 
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder().
                 expectStatusCode(200).
-                expectContentType(ContentType.JSON).
-                log(LogDetail.ALL);
-        customResponeSpecification = responseSpecBuilder.build();
+                expectContentType(ContentType.JSON).log(LogDetail.ALL);
+        RestAssured.responseSpecification = responseSpecBuilder.build();
     }
+
     @Test
     public void validate_post_json_array_as_list(){
                 HashMap<String,String> hashMap = new HashMap<>();
@@ -57,7 +52,7 @@ public class post_request_using_array_as_list {
                         body(jsonList).
                 when().
                     post("/post").
-                then().spec(customResponeSpecification)
+                then()
                         .assertThat().body("msg",equalTo("success"));
     }
 }
