@@ -2,7 +2,7 @@ package com.test;
 
 import org.testng.annotations.Test;
 
-import java.io.File;
+import java.io.*;
 import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
@@ -58,7 +58,6 @@ public class RequestParameters {
                     statusCode(200);
 
     }
-    @Test
     public void upload_file_multipart_form_data() {
         String attributes = "{\n" +
                 "  \"instructions\": [\n" +
@@ -79,6 +78,29 @@ public class RequestParameters {
                     assertThat().
                     statusCode(200);
 
+    }
+    @Test
+    public void download_file() throws IOException {
+ /*       byte[] bytes = given().
+                baseUri("https://github.com/appium")
+                .when().
+                    get("/appium-desktop/releases/download/v1.22.0/Appium-Server-GUI-mac-1.22.0.dmg.blockmap/").
+                then().
+                    log().all().extract().asByteArray();
+        OutputStream os = new FileOutputStream(new File("Appium-Server-GUI-mac-1.22.0.dmg.blockmap"));
+        os.write(bytes);
+        os.close();*/
+        InputStream inputStream = given().
+                baseUri("https://github.com/appium")
+                .when().
+                get("/appium-desktop/releases/download/v1.22.0/Appium-Server-GUI-mac-1.22.0.dmg.blockmap/").
+                then().
+                log().all().extract().asInputStream();
+        OutputStream os = new FileOutputStream(new File("Appium-Server-GUI-mac-1.22.0.dmg.blockmap"));
+        byte[] bytes = new byte[inputStream.available()];
+        inputStream.read(bytes);
+        os.write(bytes);
+        os.close();
     }
 
 }
