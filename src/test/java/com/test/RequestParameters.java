@@ -1,10 +1,12 @@
 package com.test;
 
+import io.restassured.config.EncoderConfig;
 import org.testng.annotations.Test;
 
 import java.io.*;
 import java.util.HashMap;
 
+import static io.restassured.RestAssured.config;
 import static io.restassured.RestAssured.given;
 
 public class RequestParameters {
@@ -79,7 +81,7 @@ public class RequestParameters {
                     statusCode(200);
 
     }
-    @Test
+
     public void download_file() throws IOException {
  /*       byte[] bytes = given().
                 baseUri("https://github.com/appium")
@@ -101,6 +103,21 @@ public class RequestParameters {
         inputStream.read(bytes);
         os.write(bytes);
         os.close();
+    }    @Test
+    public void form_urlencode() throws IOException {
+        given().
+                baseUri("https://postman-echo.com")
+                .config(config().encoderConfig(EncoderConfig.encoderConfig()
+                        .appendDefaultContentCharsetToContentTypeIfUndefined(false)))
+                .formParam("foo1","bar1")
+                .formParam("foo2","bar2")
+                .log().all()
+        .when()
+                .post("/post")
+        .then()
+                .log().all()
+                .assertThat()
+                .statusCode(200);
     }
 
 }
