@@ -2,6 +2,7 @@ package com.test;
 
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.util.HashMap;
 
 import static io.restassured.RestAssured.given;
@@ -43,12 +44,33 @@ public class RequestParameters {
                     statusCode(200);
 
     }
-    @Test
     public void multipart_from_data() {
         given().
                 baseUri("https://postman-echo.com")
                 .multiPart("foo1","bar1")
                 .multiPart("foo2","bar2")
+                .log().all()
+                .when().
+                    post("/post/").
+                then().
+                    log().all().
+                    assertThat().
+                    statusCode(200);
+
+    }
+    @Test
+    public void upload_file_multipart_form_data() {
+        String attributes = "{\n" +
+                "  \"instructions\": [\n" +
+                "    \"GroovyExample.txt\",\n" +
+                "    \"Select an item to view its path.\",\n" +
+                "    \"Replace 'x' with the name of your variable.\"\n" +
+                "  ]\n" +
+                "}";
+        given().
+                baseUri("https://postman-echo.com")
+                .multiPart("file",new File("src/main/resources/GroovyExample.txt"))
+                .multiPart("attributes",attributes,"application/json")
                 .log().all()
                 .when().
                     post("/post/").
