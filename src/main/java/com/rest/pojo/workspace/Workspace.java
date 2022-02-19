@@ -2,6 +2,8 @@ package com.rest.pojo.workspace;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.HashMap;
+
 
 public class Workspace {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -11,7 +13,16 @@ public class Workspace {
     private String description;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String id;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private HashMap<String,String> hashMap;
 
+    public HashMap<String, String> getHashMap() {
+        return hashMap;
+    }
+
+    public void setHashMap(HashMap<String, String> hashMap) {
+        this.hashMap = hashMap;
+    }
 
     public Workspace(){
 
