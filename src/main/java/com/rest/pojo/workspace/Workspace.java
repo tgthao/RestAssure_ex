@@ -2,11 +2,14 @@ package com.rest.pojo.workspace;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+
 public class Workspace {
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private int i;
     private String name;
     private String type;
     private String description;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String id;
 
 
@@ -48,5 +51,13 @@ public class Workspace {
     public void setId(String id) {
         this.id = id;
     }
+    public int getI() {
+        return i;
+    }
+
+    public void setI(int i) {
+        this.i = i;
+    }
+
 
 }
