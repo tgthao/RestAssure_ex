@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class RequestRoot {
     private  String name;
     Request request;
+    public RequestRoot(){
+
+    }
     public RequestRoot(String name, Request request){
         this.name = name;
         this.request=request;

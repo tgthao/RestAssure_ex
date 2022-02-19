@@ -11,6 +11,12 @@ import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.ResponseSpecification;
+import org.json.JSONException;
+import org.skyscreamer.jsonassert.Customization;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
+import org.skyscreamer.jsonassert.ValueMatcher;
+import org.skyscreamer.jsonassert.comparator.CustomComparator;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -39,7 +45,7 @@ public class ComplexPojoTest {
         customResponeSpecification = responseSpecBuilder.build();
     }
     @Test
-    public void simple_pojo_example() throws JsonProcessingException {
+    public void simple_pojo_example() throws JsonProcessingException, JSONException {
         Header header = new Header("Content-type","application/json");
         List<Header> headerList = new ArrayList<>();
         headerList.add(header);
@@ -51,11 +57,11 @@ public class ComplexPojoTest {
         requestRootList.add(requestRoot);
 
         Folder folder = new Folder("This is a folder",requestRootList);
-        List<Object> folderList = new ArrayList<>();
+        List<Folder> folderList = new ArrayList<>();
         folderList.add(folder);
 
         Info info = new Info("Sample Collection1","This is just a sample collection"
-                ,"https://schema.postman.com/json/collection/v2.1.0/collection.json");
+                ,"https://schema.getpostman.com/json/collection/v2.1.0/collection.json");
         Collection collection = new Collection(info,folderList);
 
         CollectionRoot collectionRoot = new CollectionRoot(collection);
@@ -77,6 +83,18 @@ public class ComplexPojoTest {
                 .extract()
                 .response()
                 .as(CollectionRoot.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String collectionRootStr = objectMapper.writeValueAsString(collectionRoot);
+        String deserializedCollectionRootStr = objectMapper.writeValueAsString(deserializedCollectionRoot);
+
+        JSONAssert.assertEquals(collectionRootStr,deserializedCollectionRootStr,
+                new CustomComparator(JSONCompareMode.LENIENT,
+                        new Customization("collection.item[*].item[*].request.url",
+                                new ValueMatcher<Object>(){
+                    public boolean equal(Object a1, Object a2){
+                        return true;
+                    }
+                })));
 
     }
 }
