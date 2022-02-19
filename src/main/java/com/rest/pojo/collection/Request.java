@@ -1,7 +1,10 @@
 package com.rest.pojo.collection;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Request {
     private String url;
     private  String post;

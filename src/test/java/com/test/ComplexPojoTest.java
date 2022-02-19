@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rest.pojo.collection.*;
 import com.rest.pojo.simple.SimplePojo;
+import com.rest.pojo.workspace.WorkspaceRoot;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -58,7 +59,7 @@ public class ComplexPojoTest {
         Collection collection = new Collection(info,folderList);
 
         CollectionRoot collectionRoot = new CollectionRoot(collection);
-        given()
+        String collectionUid = given()
                 .body(collectionRoot)
         .when().
                     post("/collections").
@@ -66,6 +67,16 @@ public class ComplexPojoTest {
                     spec(customResponeSpecification)
                 .extract()
                 .response()
-                       .as(SimplePojo.class);
+                       .path("collection.uid");
+
+        CollectionRoot deserializedCollectionRoot = given()
+                .pathParam("collectionUid",collectionUid)
+                .when()
+                .get("/collections/{collectionUid}")
+                .then().spec(customResponeSpecification)
+                .extract()
+                .response()
+                .as(CollectionRoot.class);
+
     }
 }
