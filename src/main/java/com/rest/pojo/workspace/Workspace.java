@@ -1,5 +1,8 @@
 package com.rest.pojo.workspace;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Workspace {
     private String name;
     private String type;
