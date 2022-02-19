@@ -12,6 +12,7 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.ResponseSpecification;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
@@ -40,8 +41,7 @@ public class WorkspacePojoTest {
                 log(LogDetail.ALL);
         customResponeSpecification = responseSpecBuilder.build();
     }
-    @Test
-    public void simple_pojo_example() throws JsonProcessingException {
+    public void workspace_data_pojo() throws JsonProcessingException {
         Workspace workspace = new Workspace("My API RestAssured 1","personal","API RestAssured created");
         WorkspaceRoot workspaceRoot = new WorkspaceRoot(workspace);
         WorkspaceRoot deserializedRoot = given().body(workspaceRoot)
@@ -52,5 +52,26 @@ public class WorkspacePojoTest {
                 .as(WorkspaceRoot.class);
         assertThat(deserializedRoot.getWorkspace().getName(),equalTo(workspaceRoot.getWorkspace().getName()));
         assertThat(deserializedRoot.getWorkspace().getId(),matchesPattern("^[a-z0-9-]{36}$"));
+    }
+
+    @Test(dataProvider = "workspace")
+    public void workspace_data_provider(String name, String type, String description) {
+        Workspace workspace = new Workspace(name,type,description);
+        WorkspaceRoot workspaceRoot = new WorkspaceRoot(workspace);
+        WorkspaceRoot deserializedRoot = given().body(workspaceRoot)
+                .when().post("/workspaces")
+                .then().spec(customResponeSpecification)
+                .extract()
+                .response()
+                .as(WorkspaceRoot.class);
+        assertThat(deserializedRoot.getWorkspace().getName(),equalTo(workspaceRoot.getWorkspace().getName()));
+        assertThat(deserializedRoot.getWorkspace().getId(),matchesPattern("^[a-z0-9-]{36}$"));
+    }
+    @DataProvider(name = "workspace")
+    public Object[][] getWorkspace(){
+        return new Object[][]{
+                {"my Workspace API Rest Assured 01", "personal", "descr˚iption"},
+                {"my Workspace API Rest Assured 02", "personal", "description"}
+        };
     }
 }
