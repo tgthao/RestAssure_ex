@@ -1,14 +1,30 @@
 package com.rest.pojo.workspace;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+import java.util.HashMap;
+
+@JsonIgnoreProperties(value = {"id","i"},allowSetters = true)
 public class Workspace {
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private int i;
     private String name;
     private String type;
     private String description;
+ //   @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String id;
+    @JsonIgnore
+    private HashMap<String,String> hashMap;
 
+    public HashMap<String, String> getHashMap() {
+        return hashMap;
+    }
+
+    public void setHashMap(HashMap<String, String> hashMap) {
+        this.hashMap = hashMap;
+    }
 
     public Workspace(){
 
@@ -48,5 +64,13 @@ public class Workspace {
     public void setId(String id) {
         this.id = id;
     }
+    public int getI() {
+        return i;
+    }
+
+    public void setI(int i) {
+        this.i = i;
+    }
+
 
 }
