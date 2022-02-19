@@ -22,6 +22,7 @@ public class DefaultRequestSpecification {
         requestSpecBuilder.addHeader("X-API-KEY","PMAK-6207aa1f91e45e028abb0eea-96be721c435eb5d9df2049fffe94a58c3c");
         requestSpecBuilder.log(LogDetail.HEADERS);
         RestAssured.requestSpecification = requestSpecBuilder.build();
+        System.out.printf("Before Class\n");
 
     }
     /*RequestSpecification requestSpecification =  with().
@@ -39,7 +40,7 @@ public class DefaultRequestSpecification {
     public void validate_response_body(){
         Response response = get("/workspaces").then().log().all().extract().response();
         assertThat(response.statusCode(),is(equalTo(200)));
-        assertThat(response.path("workspaces[0].name").toString(),is(equalTo("My Workspace")));
+        assertThat(response.path("workspaces[0].name").toString(),is(equalTo("Test Flir")));
 
     }
 }
