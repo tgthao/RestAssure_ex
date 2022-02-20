@@ -5,18 +5,16 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Request {
-    private Object url;
+public abstract class RequestBase {
     private  String post;
     List<Header> header;
     Body body;
     private String description;
-    public  Request(){
+    public RequestBase(){
 
     }
-    public Request(Object url, String post,List<Header> header,Body body, String description){
-        this.url=url;
-        this.post=post;
+    public RequestBase(String method, List<Header> header, Body body, String description){
+        this.post=method;
         this.header=header;
         this.body=body;
         this.description=description;
@@ -37,13 +35,6 @@ public class Request {
         this.description = description;
     }
 
-    public Object getUrl() {
-        return url;
-    }
-
-    public void setUrl(Object url) {
-        this.url = url;
-    }
 
     public String getPost() {
         return post;
