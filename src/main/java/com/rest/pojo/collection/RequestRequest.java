@@ -15,7 +15,7 @@ public class RequestRequest extends RequestBase{
         this.url=url;
     }
 
-    public Object getUrl() {
+    public String getUrl() {
         return url;
     }
 

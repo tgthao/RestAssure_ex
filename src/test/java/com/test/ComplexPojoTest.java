@@ -23,6 +23,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public class ComplexPojoTest {
     ResponseSpecification customResponeSpecification;
@@ -88,6 +89,25 @@ public class ComplexPojoTest {
         JSONAssert.assertEquals(collectionRootStr,deserializedCollectionRootStr,
                 new CustomComparator(JSONCompareMode.STRICT_ORDER,
                         new Customization("collection.item[*].item[*]",
+                        //new Customization("collection.item[*].item[*].request.url",
                                 (a1, a2) -> true)));
+        List<String> UrlRequestList = new ArrayList<>();
+        List<String > UrlResponseList = new ArrayList<>();
+        for (RequestRootRequest requestRootRequest:requestRootList){
+            System.out.println("Url from request payload: "+requestRootRequest.getRequest().getUrl());
+            //UrlRequestList.add(requestRootRequest.getRequest().getUrl());
+            UrlRequestList.add("24h.com.vn");
+        }
+        List<FolderResponse> folderResponseList = deserializedCollectionRoot.getCollection().getItem();
+        for(FolderResponse folderResponse : folderResponseList){
+            List<RequestRootResponse> requestRootResponseList = folderResponse.getItem();
+            for (RequestRootResponse requestRootResponse : requestRootResponseList){
+            System.out.println("Url from response: "+requestRootResponse.getRequest().getUrl().getRaw());
+                Url url = requestRootResponse.getRequest().getUrl();
+                url.getRaw();
+                UrlResponseList.add(url.getRaw());
+            }
+        }
+        assertThat(UrlResponseList,containsInAnyOrder(UrlRequestList.toArray()));
     }
 }

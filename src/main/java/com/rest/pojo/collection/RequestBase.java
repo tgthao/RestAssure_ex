@@ -52,5 +52,4 @@ public abstract class RequestBase {
         this.header = header;
     }
 
-
 }

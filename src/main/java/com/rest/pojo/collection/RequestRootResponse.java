@@ -12,7 +12,7 @@ public class RequestRootResponse extends RequestRootBase{
         super(name);
         this.request=request;
     }
-    public RequestBase getRequest() {
+    public RequestResponse getRequest() {
         return request;
     }
 
