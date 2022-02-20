@@ -24,6 +24,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
 
 public class ComplexPojoTest {
     ResponseSpecification customResponeSpecification;
@@ -109,5 +110,44 @@ public class ComplexPojoTest {
             }
         }
         assertThat(UrlResponseList,containsInAnyOrder(UrlRequestList.toArray()));
+    }
+    @Test
+    public void simple_pojo_example02() throws JsonProcessingException, JSONException {
+        List<FolderRequest> folderList = new ArrayList<>();
+
+        Info info = new Info("Sample Collection2","This is just a sample collection"
+                ,"https://schema.getpostman.com/json/collection/v2.1.0/collection.json");
+        CollectionRequest collection = new CollectionRequest(info,folderList);
+
+        CollectionRootRequest collectionRoot = new CollectionRootRequest(collection);
+        String collectionUid = given()
+                .body(collectionRoot)
+        .when().
+                    post("/collections").
+        then().
+                    spec(customResponeSpecification)
+                .extract()
+                .response()
+                       .path("collection.uid");
+
+        CollectionRootResponse deserializedCollectionRoot = given()
+                .pathParam("collectionUid",collectionUid)
+                .when()
+                .get("/collections/{collectionUid}")
+                .then().spec(customResponeSpecification)
+                .extract()
+                .response()
+                .as(CollectionRootResponse.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String collectionRootStr = objectMapper.writeValueAsString(collectionRoot);
+        String deserializedCollectionRootStr = objectMapper.writeValueAsString(deserializedCollectionRoot);
+
+        assertThat(objectMapper.readTree(collectionRootStr),equalTo(
+                objectMapper.readTree(deserializedCollectionRootStr)));
+   /*     JSONAssert.assertEquals(collectionRootStr,deserializedCollectionRootStr,
+                new CustomComparator(JSONCompareMode.STRICT_ORDER,
+                        new Customization("collection.item[*].item[*]",
+                        //new Customization("collection.item[*].item[*].request.url",
+                                (a1, a2) -> true)));*/
     }
 }
