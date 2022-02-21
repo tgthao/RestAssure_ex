@@ -23,7 +23,7 @@ public class GmailApi {
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder()
                 .setBaseUri("https://gmail.googleapis.com")
                 .addHeader("Authorization","Bearer "+access_token)
-                .setContentType(ContentType.JSON)
+                .setContentType("application/json; charset=utf-8")
                 .log(LogDetail.ALL);
         requestSpecification = requestSpecBuilder.build();
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder()
