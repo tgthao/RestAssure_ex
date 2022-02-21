@@ -7,6 +7,7 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.session.SessionFilter;
 import io.restassured.http.Cookie;
 import io.restassured.http.Cookies;
+import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -69,7 +70,6 @@ public class FormAuthenticate {
                 .assertThat().statusCode(200)
                 .body("html.body.div.p",equalTo("This is User Profile\\Index. Only authenticated people can see this"));
     }
-    @Test
     public  void sending_cookie_builder(){
         SessionFilter sessionFilter = new SessionFilter();
         given().
@@ -98,7 +98,6 @@ public class FormAuthenticate {
                 .assertThat().statusCode(200)
                 .body("html.body.div.p",equalTo("This is User Profile\\Index. Only authenticated people can see this"));
     }
-    @Test
     public  void sending_multiple_cookie(){
         SessionFilter sessionFilter = new SessionFilter();
         given().
@@ -128,5 +127,23 @@ public class FormAuthenticate {
                 .log().all()
                 .assertThat().statusCode(200)
                 .body("html.body.div.p",equalTo("This is User Profile\\Index. Only authenticated people can see this"));
+    }
+    @Test
+    public  void fetch_single_cookie(){
+        Response response =
+        given().log().all()
+        .when()
+                .get("/profile/index")
+        .then()
+                .log().all()
+                .assertThat()
+                .statusCode(200)
+                .extract()
+                .response();
+       // System.out.println(response.xmlPath().getString("html.head.title"));
+        System.out.println(response.getCookie("JSESSIONID"));
+        System.out.println(response.getDetailedCookie("JSESSIONID"));
+        response.getCookie("JSESSIONID");
+        response.getDetailedCookie("JSESSIONID");
     }
 }
