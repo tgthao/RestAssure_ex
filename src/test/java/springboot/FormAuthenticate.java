@@ -19,7 +19,6 @@ public class FormAuthenticate {
                 .setBaseUri("https://localhost:8443").build();
 
     }
-    @Test
     public  void form_authenticate_csrf(){
         SessionFilter sessionFilter = new SessionFilter();
         given().
@@ -36,6 +35,31 @@ public class FormAuthenticate {
         System.out.println("Session id: "+sessionFilter.getSessionId());
         given()
                 .sessionId(sessionFilter.getSessionId())
+                .log().all()
+        .when()
+                .get("/profile/index")
+         .then()
+                .log().all()
+                .assertThat().statusCode(200)
+                .body("html.body.div.p",equalTo("This is User Profile\\Index. Only authenticated people can see this"));
+    }
+    @Test
+    public  void sending_cookie_flow(){
+        SessionFilter sessionFilter = new SessionFilter();
+        given().
+                auth().form("dan", "dan123", new FormAuthConfig("/signin",
+                        "txtUsername", "txtPassword").withAutoDetectionOfCsrf())
+                .filter(sessionFilter)
+                .log().all().
+         when().
+                get("/login")
+        .then().
+                log().all()
+                .assertThat()
+                .statusCode(200);
+        System.out.println("Session id: "+sessionFilter.getSessionId());
+        given()
+                .cookie("JSESSIONID",sessionFilter.getSessionId())
                 .log().all()
         .when()
                 .get("/profile/index")
