@@ -3,18 +3,18 @@ package com.rest.pojo.collection;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CollectionRoot {
-    Collection collection;
-    public CollectionRoot(){
+public class CollectionRootBase {
+    CollectionBase collection;
+    public CollectionRootBase(){
     }
-    public CollectionRoot(Collection collection){
+    public CollectionRootBase(CollectionBase collection){
         this.collection=collection;
     }
-    public Collection getCollection() {
+    public CollectionBase getCollection() {
         return collection;
     }
 
-    public void setCollection(Collection collection) {
+    public void setCollection(CollectionBase collection) {
         this.collection = collection;
     }
 }

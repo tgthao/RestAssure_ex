@@ -3,15 +3,13 @@ package com.rest.pojo.collection;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RequestRoot {
+public class RequestRootBase {
     private  String name;
-    Request request;
-    public RequestRoot(){
+    public RequestRootBase(){
 
     }
-    public RequestRoot(String name, Request request){
+    public RequestRootBase(String name){
         this.name = name;
-        this.request=request;
     }
     public String getName() {
         return name;
@@ -20,14 +18,5 @@ public class RequestRoot {
     public void setName(String name) {
         this.name = name;
     }
-
-    public Request getRequest() {
-        return request;
-    }
-
-    public void setRequest(Request request) {
-        this.request = request;
-    }
-
 
 }
