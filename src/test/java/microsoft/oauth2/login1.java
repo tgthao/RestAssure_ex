@@ -23,8 +23,8 @@ public class login1 {
         RequestSpecBuilder requestSpecBuilder = new RequestSpecBuilder()
                 .setBaseUri("https://flirb2cprod.b2clogin.com")
                 //.addHeader("Authorization","Bearer "+access_token)
-                .setContentType("application/json; charset=utf-8")
-             //   .setContentType(ContentType.JSON)
+           //     .setContentType("application/json; charset=utf-8")
+                .setContentType(ContentType.JSON)
                 .log(LogDetail.ALL);
         requestSpecification = requestSpecBuilder.build();
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder()
