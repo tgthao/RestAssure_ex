@@ -9,6 +9,9 @@ import io.restassured.specification.ResponseSpecification;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.Base64;
+import java.util.HashMap;
+
 import static io.restassured.RestAssured.given;
 
 public class GmailApi {
@@ -38,9 +41,25 @@ public class GmailApi {
                 .get("users/{userid}/profile")
         .then()
                 .spec(responseSpecification);
-
-
-
+    }
+    @Test
+    public void sendEmail(){
+        String message="From: giangthaoapi@gmail.com\n" +
+                "To: thaogiang.90@gmail.com\n" +
+                "Subject: RestAssured Test Email\n" +
+                "\n" +
+                "Send from Automate Rest Assured";
+        String base64EncodeMsg = Base64.getUrlEncoder().encodeToString(message.getBytes());
+        HashMap<String,String> payload = new HashMap<>();
+        payload.put("raw",base64EncodeMsg);
+        given(requestSpecification)
+                .basePath("/gmail/v1/")
+                .pathParam("userid","giangthaoapi@gmail.com")
+                .body(payload)
+        .when()
+                .post("users/{userid}/messages/send")
+        .then()
+                .spec(responseSpecification);
     }
 
 }
