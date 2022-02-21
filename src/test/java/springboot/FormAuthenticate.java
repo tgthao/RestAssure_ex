@@ -9,6 +9,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 public class FormAuthenticate {
     @BeforeClass
@@ -40,6 +41,7 @@ public class FormAuthenticate {
                 .get("/profile/index")
          .then()
                 .log().all()
-                .assertThat().statusCode(200);
+                .assertThat().statusCode(200)
+                .body("html.body.div.p",equalTo("This is User Profile\\Index. Only authenticated people can see this"));
     }
 }
