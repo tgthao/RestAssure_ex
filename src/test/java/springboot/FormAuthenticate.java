@@ -11,6 +11,9 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.List;
+import java.util.Map;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -128,7 +131,6 @@ public class FormAuthenticate {
                 .assertThat().statusCode(200)
                 .body("html.body.div.p",equalTo("This is User Profile\\Index. Only authenticated people can see this"));
     }
-    @Test
     public  void fetch_single_cookie(){
         Response response =
         given().log().all()
@@ -145,5 +147,29 @@ public class FormAuthenticate {
         System.out.println(response.getDetailedCookie("JSESSIONID"));
         response.getCookie("JSESSIONID");
         response.getDetailedCookie("JSESSIONID");
+    }
+    @Test
+    public  void fetch_multiple_cookie(){
+        Response response =
+        given().log().all()
+        .when()
+                .get("/profile/index")
+        .then()
+                .log().all()
+                .assertThat()
+                .statusCode(200)
+                .extract()
+                .response();
+       // System.out.println(response.xmlPath().getString("html.head.title"));
+        Map<String,String> cookies = response.getCookies();
+        for(Map.Entry<String,String> entry: cookies.entrySet()){
+            System.out.println("cookie name "+entry.getKey());
+            System.out.println("cookie value "+entry.getValue());
+        }
+        Cookies cookies1 = response.getDetailedCookies();
+        List<Cookie> cookieList = cookies1.asList();
+        for(Cookie cookie: cookieList){
+            System.out.println("cookie "+cookie.toString());
+        }
     }
 }
